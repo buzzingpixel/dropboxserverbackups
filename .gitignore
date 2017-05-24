@@ -2,7 +2,8 @@
 	# Project
 #------------------------------------
 
-# Custom project exclusions
+backups/*
+env.sh
 
 
 
