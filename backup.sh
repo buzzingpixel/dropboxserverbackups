@@ -12,6 +12,8 @@ localRotate=2;
 dropboxBackDirName=${HOSTNAME};
 dirs=();
 databases=();
+tarAsSudo=false;
+tarAsSudoPassword=false;
 
 # Import environment variables
 . env.sh
@@ -41,7 +43,15 @@ for dir in "${dirs[@]}"; do
     dirNameSafe=${dir//\//_};
 
     # Create gzipped tarball of specified directory
-    tar -czf backups/${date}/${dirNameSafe}.tar.gz ${dir};
+    if [ ${tarAsSudo} = false ]; then
+        tar -czf backups/${date}/${dirNameSafe}.tar.gz ${dir};
+    else
+        if [ ${tarAsSudoPassword} = false ]; then
+            sudo tar -czf backups/${date}/${dirNameSafe}.tar.gz ${dir};
+        else
+            echo ${tarAsSudoPassword} | sudo -S tar -czf backups/${date}/${dirNameSafe}.tar.gz ${dir};
+        fi
+    fi
 done;
 
 
